@@ -122,7 +122,7 @@ func init() {
 	rootCmd.Flags().BoolVar(&config.SendAPIAuthAcceptAny, "send-api-auth-accept-any", config.SendAPIAuthAcceptAny, "Accept any username and password for the Send API endpoint, including none")
 
 	// Prometheus metrics
-	rootCmd.Flags().StringVar(&config.PrometheusListen, "enable-prometheus", config.PrometheusListen, "Enable Prometheus metrics: true|false|<bind interface & port> (eg:':9090')")
+	rootCmd.Flags().StringVar(&config.PrometheusListen, "enable-prometheus", config.PrometheusListen, "Enable Prometheus metrics: true|false|<ip:port> (eg:'0.0.0.0:9090')")
 
 	// SMTP server
 	rootCmd.Flags().StringVarP(&config.SMTPListen, "smtp", "s", config.SMTPListen, "SMTP bind interface and port")
