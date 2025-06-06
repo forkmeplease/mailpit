@@ -191,6 +191,10 @@ var (
 	// AllowUntrustedTLS allows untrusted HTTPS connections link checking & screenshot generation
 	AllowUntrustedTLS bool
 
+	// PrometheusListen address for Prometheus metrics server
+	// Empty = disabled, true= use existing web server, address = separate server
+	PrometheusListen string
+
 	// Version is the default application version, updated on release
 	Version = "dev"
 
@@ -356,6 +360,20 @@ func VerifyConfig() error {
 
 	if SendAPIAuthAcceptAny && auth.UICredentials != nil {
 		logger.Log().Info("[send-api] disabling authentication")
+	}
+
+	// Prometheus configuration validation
+	if PrometheusListen != "" {
+		mode := strings.ToLower(strings.TrimSpace(PrometheusListen))
+		if mode != "true" && mode != "false" {
+			// Validate as address for separate server mode
+			_, err := net.ResolveTCPAddr("tcp", PrometheusListen)
+			if err != nil {
+				return fmt.Errorf("[prometheus] %s", err.Error())
+			}
+		} else if mode == "true" {
+			logger.Log().Info("[prometheus] enabling metrics")
+		}
 	}
 
 	// SMTP server
